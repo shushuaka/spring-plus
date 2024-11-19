@@ -17,6 +17,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -84,5 +88,26 @@ public class TodoService {
                 todo.getCreatedAt(),
                 todo.getModifiedAt()
         );
+    }
+
+    public List<TodoResponse> searchTodos(String weather, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Todo> todos = todoRepository.findByConditions(weather, startDate, endDate);
+
+        return todos.stream()
+                .map(todo -> new TodoResponse(
+                        todo.getId(),
+                        todo.getTitle(),
+                        todo.getContents(),
+                        todo.getWeather(),
+                        new UserResponse(
+                                todo.getUser().getId(),
+                                todo.getUser().getEmail(),
+                                todo.getUser().getNickname(),
+                                todo.getUser().getUserRole()
+                        ),
+                        todo.getCreatedAt(),
+                        todo.getModifiedAt()
+                ))
+                .collect(Collectors.toList());
     }
 }
