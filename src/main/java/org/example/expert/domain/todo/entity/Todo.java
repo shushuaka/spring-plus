@@ -30,19 +30,10 @@ public class Todo extends Timestamped {
     @OneToMany(mappedBy = "todo", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "todo")
+    @OneToMany(mappedBy = "todo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Manager> managers = new ArrayList<>();
 
     public Todo(String title, String contents, String weather, User user) {
-        this.title = title;
-        this.contents = contents;
-        this.weather = weather;
-        this.user = user;
-        this.managers.add(new Manager(user, this));
-    }
-
-    public Todo(Long id, String title, String contents, String weather, User user) {
-        this.id = id;
         this.title = title;
         this.contents = contents;
         this.weather = weather;

@@ -45,7 +45,7 @@ public class TodoServiceTest {
     @BeforeEach
     void setUp() {
         mockUser = new User("test@example.com", "password", UserRole.USER);
-        mockTodo = new Todo(1L, "Title", "Contents", "Sunny", mockUser);
+        mockTodo = new Todo("Title", "Contents", "Sunny", mockUser);
     }
 
 
@@ -64,6 +64,7 @@ public class TodoServiceTest {
         assertThat(response.getId()).isEqualTo(mockTodo.getId());
         assertThat(response.getTitle()).isEqualTo(mockTodo.getTitle());
         assertThat(response.getWeather()).isEqualTo("Sunny");
+        assertThat(mockTodo.getManagers()).hasSize(1);
         verify(todoRepository, times(1)).save(any(Todo.class));
     }
 
